@@ -1,0 +1,18 @@
+from django.contrib.auth.models import AnonymousUser, User
+from django.test import RequestFactory, TestCase
+from rest_framework.test import APIRequestFactory
+
+from app.views import WeatherView
+
+
+class SimpleTest(TestCase):
+    def setUp(self):
+        # Every test needs access to the request factory.
+        self.factory = APIRequestFactory()
+
+    def test_weather(self):
+        request = self.factory.get("/weather", {"city": "Moscow"})
+        response = WeatherView.as_view()(request)
+
+        assert response.status_code == 200
+        assert response.data is not None
